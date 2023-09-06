@@ -1,0 +1,12 @@
+####### Variables de Monitoreo #########
+*/5 * * * * /bin/sh /usr/local/share/varmonitor/Procesos_Activos.sh > /tmp/Procesos_Activos.sh
+*/5 * * * * /bin/sh /usr/local/share/varmonitor/Procesos_Bloqueados.sh > /tmp/Procesos_Bloqueados.sh
+*/5 * * * * /bin/sh /usr/local/share/varmonitor/Procesos_Run_Queue.sh > /tmp/Procesos_Run_Queue.sh
+*/5 * * * * /bin/sh /usr/local/share/varmonitor/Utilizacion_Memoria.sh > /tmp/Utilizacion_Memoria.sh
+*/5 * * * * /bin/sh /usr/local/share/varmonitor/Utilizacion_PageOut.sh > /tmp/Utilizacion_PageOut.sh
+*/5 * * * * /bin/sh /usr/local/share/varmonitor/Utilizacion_Swap.sh > /tmp/Utilizacion_Swap.sh
+*/5 * * * * /bin/sh /usr/local/share/varmonitor/UtilizacionCPU_WaitingIO.sh > /tmp/UtilizacionCPU_WaitingIO.sh
+*/5 * * * * /bin/sh /usr/local/share/varmonitor/Procesos_Scan_Rate.sh > /tmp/Procesos_Scan_Rate.sh
+*/5 * * * * /bin/sh /usr/local/share/varmonitor/UtilizacionCPU_System.sh > /tmp/UtilizacionCPU_System.sh
+*/5 * * * * /bin/sh /usr/local/share/varmonitor/UtilizacionCPU_User.sh > /tmp/UtilizacionCPU_User.sh
+*/5 * * * * /bin/sh /usr/local/share/varmonitor/UtilizacionCPU_SysUser.sh > /tmp/UtilizacionCPU_SysUser.sh

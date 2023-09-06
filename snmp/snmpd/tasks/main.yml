@@ -1,0 +1,72 @@
+---
+#- name: Instalacion y configuracion de SNMP
+#  hosts: Prueba
+#  become: yes
+#  become_user: root
+
+#  tasks:
+- name: Actualizar lista de paquetes
+  apt:
+    update_cache: yes
+
+- name: Instalar paquetes SNMP
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - snmp
+    - snmpd
+    - sysstat
+
+- name: Crear una carpeta Monitoreo
+  file:
+    path: /usr/local/share/varmonitor/
+    state: directory
+
+- name: Agregar scripts de monitoreo
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/{{ item }}"
+    dest: "/usr/local/share/varmonitor/{{ item }}"
+  with_items:
+    - Procesos_Activos.sh
+    - Procesos_Bloqueados.sh
+    - Procesos_Run_Queue.sh
+    - Procesos_Scan_Rate.sh
+    - UtilizacionCPU_System.sh
+    - UtilizacionCPU_Sys_User.sh
+    - UtilizacionCPU_User.sh
+    - UtilizacionCPU_WaitingIO.sh
+    - Utilizacion_Memoria.sh
+    - Utilizacion_PageOut.sh
+    - Utilizacion_Swap.sh
+
+- name: Agregar archivo de configuracion snmpd
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/{{ item }}"
+    dest: "/etc/snmp/{{ item }}"
+  with_items:
+    - "snmpd.conf"
+
+- name: Agregar tareas de monitoreo al crontab
+  ansible.builtin.cron:
+    name: "Tarea {{ item.name }}"
+    minute: "*/5"
+    job: "/bin/sh /usr/local/share/varmonitor/{{ item.script }} > /tmp/{{ item.name }}.log"
+    user: root
+  loop:
+    - { name: "Procesos Activos", script: "Procesos_Activos.sh" }
+    - { name: "Procesos Bloqueados", script: "Procesos_Bloqueados.sh" }
+    - { name: "Procesos Run Queue", script: "Procesos_Run_Queue.sh" }
+    - { name: "Utilizacion Memoria", script: "Utilizacion_Memoria.sh" }
+    - { name: "Utilizacion PageOut", script: "Utilizacion_PageOut.sh" }
+    - { name: "Utilizacion Swap", script: "Utilizacion_Swap.sh" }
+    - { name: "Utilizacion CPU WaitingIO", script: "UtilizacionCPU_WaitingIO.sh" }
+    - { name: "Procesos Scan Rate", script: "Procesos_Scan_Rate.sh" }
+    - { name: "Utilizacion CPU System", script: "UtilizacionCPU_System.sh" }
+    - { name: "Utilizacion CPU User", script: "UtilizacionCPU_User.sh" }
+    - { name: "Utilizacion CPU SysUser", script: "UtilizacionCPU_SysUser.sh" }
+
+- name: Reiniciar el servicio snmpd
+  ansible.builtin.service:
+    name: snmpd
+    state: restarted

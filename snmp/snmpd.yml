@@ -1,0 +1,7 @@
+---
+- name: Instalacion y configuracion de SNMP
+  hosts: Prueba
+  become: yes
+  become_user: root
+  roles:
+    - snmpd
