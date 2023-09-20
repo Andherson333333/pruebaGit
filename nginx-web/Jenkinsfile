@@ -5,12 +5,8 @@ pipeline {
         stage('Construir Imagen Docker') {
             steps {
                 script {
-                    // Generar un nombre único basado en la marca de tiempo
-                    def timestamp = new Date().format('yyyyMMddHHmmss')
-                    def imageName = "nginx-web:${timestamp}"
-
                     // Construir la imagen Docker utilizando el Dockerfile
-                    docker.build(imageName, '-f Dockerfile .')
+                    docker.build('nginx-web', '-f Dockerfile .')
                 }
             }
         }
@@ -18,12 +14,8 @@ pipeline {
         stage('Desplegar en Nginx') {
             steps {
                 script {
-                    // Utilizar el nombre de la imagen generada en la etapa anterior
-                    def timestamp = new Date().format('yyyyMMddHHmmss')
-                    def imageName = "nginx-web:${timestamp}"
-
                     // Ejecutar un contenedor Docker de Nginx y desplegar la página web
-                    docker.image(imageName).withRun('-p 8080:80') {
+                    docker.image('nginx-web').withRun('-p 8080:80') {
                         // No es necesario copiar los archivos aquí, ya que el Dockerfile debe manejarlo
                     }
                 }
@@ -31,3 +23,5 @@ pipeline {
         }
     }
 }
+
+
