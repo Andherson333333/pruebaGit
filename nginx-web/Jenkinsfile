@@ -1,25 +1,14 @@
 pipeline {
-    agent any
-
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scmGit(
-                    branches: [[name: '*/master']],
-                    extensions: [],
-                    userRemoteConfigs: [[url: 'https://github.com/Andherson333333/pruebaGit']]
-                )
-            }
-        }
-
-        stage('Test') {
-            steps {
-                sh '''
-                    node --version
-                    git --version
-                    curl --version
-                '''
-            }
-        }
+  agent { dockerfile true }
+  stages {
+    stage('Test') {
+      steps {
+        sh '''
+          node --version
+          git --version
+          curl --version
+        '''
+      }
     }
+  }
 }
