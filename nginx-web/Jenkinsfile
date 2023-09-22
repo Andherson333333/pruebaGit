@@ -6,7 +6,7 @@ pipeline {
             steps {
                 script {
                     // Construir la imagen Docker a partir del Dockerfile en el directorio actual
-                    sh 'cd cd nginx-web/'
+                    sh 'cd nginx-web/'
                     sh 'docker build -t andherson -f Dockerfile .'
                 }
             }
